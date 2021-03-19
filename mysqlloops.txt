@@ -1,0 +1,116 @@
+***********procedure***************
+procedure without parameter 
+procedure with parameter 
+type of parameter in procedure
+	IN
+	OUT
+	INOUT
+***********************
+sequnce based statements 
+create or replace procedure testdata()
+begin
+	declare x int(3) default 0
+	set x=10
+	select * from employees where employeenumber=x;
+end;
+conditional statements
+1)	if condition then 
+		statements;
+	endif
+2) 	if condition then
+		statements;
+	else
+		statements;
+	endif
+3) 	if condition then 
+		statements;
+	elseif condition then	
+		statements;
+	elseif condition then 
+		statements 
+	else
+		statements;
+	endif
+4)
+	if condtion:
+		if condition:
+			statements;
+		else:
+			statements;
+		endif;
+	else
+		statements 
+	endif; 
+iterative statements
+loops 
+	1) Entry control	
+		before enter into block of loop check condition 
+		if condtion true execute block 
+		if condition false will not execute block of loop
+	2) Exit control 
+	 	without checking condition directly make ruch to execute conditional block
+		if condition is false or true dosen't matter it is mainly used 
+		when we want iteration at least 1 time either condition is true or not 
+		
+***************************while loop**************************
+create or replace procedure loop01(n int(3))
+begin 
+	declare c int(3);
+	declare s varchar(100);
+	set c=1;
+	set s=' ';
+	while c<=n do 
+		set s=concat(s,' ',c);
+		set c=c+1;
+	end while;
+	select s;
+end;
+***************************************************
+create or replace procedure loopeven(n int(3))
+begin 
+	declare c int(3);
+	declare s varchar(100);
+	set c=1;
+	set s=' ';
+	while c<=n do 
+		if mod(c,2)=0 then
+			set s=concat(s,' ',c);
+			set c=c+1;
+		else
+			set c=c+1;
+		end if;
+	end while;
+	select s;
+end;
+
+**********************Stored function***************************
+create or replace function fact01(n float) returns float(10)
+deterministic
+begin
+	declare f float(10);
+	set f=1;
+	while n>=1 do  
+		set f=f*n;
+		set n=n-1;
+	end while;
+	return (f); 
+end;
+
+**********************************************************
+create or replace function level(creditlimit double) returns varchar(30)
+deteministic
+begin 
+	declare lvl varchar(30);
+	if (creditlimit > 50000) then
+		set lvl='PLATINUM';
+	elseif (creditlimit <=50000 and creditlimit >=10000) then
+		set lvl='GOLD';
+	elseif (creditlimit < 10000) then
+		set lvl='SILVER';
+	else
+		set lvl='n/a';
+        end if;
+	return (lvl);
+end;
+
+	

@@ -1,0 +1,7 @@
+#To read a csv then use inbuilt function read.csv("filename.csv")
+data1=read.csv("automobile_data.csv")
+print(data1)
+head(data1)
+tail(data1)
+summary(data1)
+subset(data1,price>30000 & fuel.type=="diesel")
