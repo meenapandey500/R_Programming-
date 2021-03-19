@@ -1,0 +1,23 @@
+#To read data from excel files
+#To install library : 
+#There are 2 types of library used if read data from excel in R-prog.
+#1. xlsx  :  library    2. readxl
+#you can use any one library .
+#these library will not be inbuilt in r-studio
+#Then install these library(package) 
+#then use command : - install.packages("xlsx")  or install.packages("readxl")
+#install.packages("xlsx")
+#call library means packages then library()
+library(xlsx)
+#To read excel file company.xlsx in R prog. then
+#use inbuilt function read.xlsx() which define in xlsx 
+#library(packages)
+data<-read.xlsx("company.xlsx",sheetIndex=1)#student=1
+#teacher=2
+print(data)
+
+
+teacher<-read.xlsx("company.xlsx",sheetIndex=2)#student=1
+#teacher=2
+print(teacher)
+
