@@ -1,0 +1,14 @@
+library(rvest)
+lego_movie <- html("http://www.imdb.com/title/tt1490017/")
+lego_movie %>%
+   html_node("strong span") %>%
+   html_text() %>%
+   as.numeric()
+
+title_html<-html_nodes(webpage,'span#titleYear')
+title<-html_text(title_html)
+# remove spaces and newlines and tabs > 
+rate <- str_replace_all(rate, "[\r\n]" ,"")
+rate <- str_trim(rate)  
+head(title)
+

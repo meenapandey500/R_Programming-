@@ -1,0 +1,6 @@
+x = c(10, 20, 30, 20, 20, 25, 9, 26) 
+print("Original Vectors:") 
+print(x) 
+print("Find second highest value in a given vector:")
+l = length(x)
+print(sort(x)[l-1])

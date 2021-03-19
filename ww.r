@@ -1,0 +1,10 @@
+a=readline(prompt="enter number a")
+b=readline(prompt="enter number b")
+class(a)
+class(b)
+a=as.integer(a)
+b=as.integer(b)
+class(a)
+class(b)
+c=a+b
+print(c)
