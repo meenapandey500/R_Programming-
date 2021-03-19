@@ -1,0 +1,289 @@
+introduction to DBMS
+adv vs dis adv of DBMS 
+database model 
+RDBMS 
+database first we need to design er diagram 
+which describe how each real life object or entity related with each other 
+componants 
+1) Entity
+	strong
+	weak
+2) Attribute
+	regular attributes(name of person) 
+	derrived attributes(age can be derrived from dob)
+	key attributes(which identify records uniqueness in rdbms)
+	multivalues attributes(address(adressline,city,country,pincode))
+3) Relation
+	many-many
+	one -many
+	many-one
+	one-one 
+	
+	cardinality  
+	oedinality (define mandetary non-mandetary)
+4)normalization
+	stop duplication 
+	remove dependecies 
+		functional dependecies 
+	1 -> 2 -> 3 -> 4-> 5->6-> 7
+	
+	now a days whatever database we use in transaction they are 
+	1 -> 2 -> 3 normal forms only 
+	
+	1) 
+		no multivalued column 
+		each record must have unique identity using primary key 
+	2) 
+		it must be in first normal form 
+		no functional dependecies 
+	3) 
+		it must be in 2nd normal form 
+		no transectional dependecies 
+		
+*********************************MYSQL*************************************
+maria-db clone database (mysql) not case sensitive 
+references column level foreign key not possible 
+********************************MYSQL SERVER***************************
+data & columns both case sensitive 
+references column level foreign key is possible 
+
+*******************RDBMS**********************************************
+uses common subversion languge (intermediate languge that is SQL which is supported by 
+all RDMS based Database management systems like oracle,ms sql server,db2 etc....)
+SQL have 4 type of commands (statements)
+
+	DDL
+	DML
+	DCL
+	TCL
+
+database have basic storage unit which combination of rows & columns 
+which is known as table table will be always logical 
+
+DDL
+basic structure of table can be created can be changed altered and drop by 
+DDL 
+create table 
+alter table 
+drop table 
+truncate table 
+
+create table dept(d_id int(3),d_name varchar(50),
+	constraint dept_id_pk primary key(d_id));
+
+maria db will not give foreign key to d_id of employee table because we have 
+given column level integrity constraints 
+create table emp(eid int(3)primary key,
+name varchar(40),d_id int(3) references dept(d_id))
+
+#will work in maria db
+create table emp(eid int(3)primary key,
+name varchar(40),d_id int(3),
+constraint dept_id_fk foreign key(d_id) references dept(d_id))
+
+constraints 
+	1) integrity constraints 
+		primary key 
+		foreign key 
+	2) business constraints 
+		not null,unique,check 
+***************************************************
+alter table emp add jobtitle varchar(30);
+alter table emp drop jotitle;
+alter table dept add status enum('1','0');
+alter table emp add email varchar(30);
+alter table emp add constraint email_unique unique(email);
+****************************************************************
+drop table emp;
+drop table dept;
+*****************************************************************
+truncate table emp ;
+	will remove all data of table and redefine structure of table 
+
+************************DML*****************************
+insert 
+update 
+delete 
+select
+*********************************************************
+select * from table 
+select * from table where condition 
+select cols,cols from table 
+select cols,cols from table where condition 
+select cols,cols from table where condition  order by 
+**************************************************************
+group by group function 
+	sum()
+	avg()
+	count()
+	min()
+	max()
+	
+it make group of records on based of common records 
+	dept_id
+	manager_id
+	city 
+	jobtitle 
+	productline 
+	orders customer will be common 
+	
+select count(*),dept_id from employees group by dept_id 
+select productline,avg(MSRP) as avgprice from products group by productline
+order by avgprice
+
+select productline,avg(MSRP) as avgprice from products group by productline
+having avg(MSRP) > 50000
+order by avgprice
+***********************subquery****************************************
+1) single row sub query 
+	<,>,<=,>=,=,!=
+
+when our matching record will be only one from subquery 
+select * from employees where dept_name =(select dept_name from department where dept_id=90)
+
+
+2) multiple row subquery 
+	in,
+	not in
+	<any()
+	>any()
+	<all()
+	>all()
+select * from employees where 
+salary > any(select salary from employees where dept_id=90)
+
+
+corelated sub query 
+
+which is used mostly to update record of table that have newly added column 
+create table empdummy as select * from employees 
+alter table empummy drop d_id;
+alter table empdummy add d_id int(3);
+
+update empdumyy o set d_id = (select d_id  from employees i where o.e_id=i.e_id)
+
+******************************Joins******************************************
+used to fetch data from multiple table 
+inner join(eque join)
+	natural join 
+	join with using column
+	join with on clause 
+	join with where clause 
+	self join
+	non-eque join
+outer join
+	left outer 
+	right outer 
+	full outer is possible with union 
+cross join
+	20 records in table 1 
+	100 records in table 2
+	20 * 100 
+	2000 records will be given 
+
+**********************************Views***********************************
+stored object which preserve projection of query as snapshot
+create or replace view <name of view > as select * from table 
+complex view 
+simple view 
+	1) provieds security 
+	2) make easy to manage data 
+create or replace view TestEmpview as select * from employees where dept_id=90
+
+select * from testempview; 
+	fetch all records from table through view 
+	only those whi have dept_id 90 
+complex view are those which uses complex query to create a projections 
+	like function,group by,join,arithmatic 
+	that are read only by default 
+simple view are updatble	
+because we can perform insert,update,delete through view into table 
+insert into testempview values()
+update testempview set col=value
+delete from testempview where condition 
+*******************view created with check option 
+create or replace view TestEmpview as select * from employees where dept_id=90
+with check option 
+
+so if i try to insert update or delete records against where clause 
+it will give an error 
+
+********************TCL************************************
+set autocommit =0 
+	transactions 
+commit 
+rollback 
+************************DCL*************************
+create user nameofuser identified by 'password'
+grant all on *.* to username@localhost
+grant all on db111.* to username@localhost
+grant all on db111.employees to username@localhost
+grant all on db111.employeeview to username@localhost
+grant select on db111.* to username@localhost
+grant select,insert,update on db111.* to username@localhost
+
+revoke all on *.* from username@localhost
+
+mysql -h localhost -u username -p
+mysql -u username@localhost -p
+>> give password
+
+*************************stored procedure & stored Functions*******************
+this are programs written into mysql environment as a database object 
+this programs will execute under mysql executor 
+this programs will be combinamtion of 
+	programming langugae type syntax 
+	and 
+	SQL 
+we can call this programs into java,python other programming lagugaes 
+this programs are faster because execute under database engine 
+
+*******************stored procedure**********************
+create or replace procedure <nameofprocedure>(parameters)
+begin 
+	decalre 
+end;
+
+create or replace procedure testapp(t varchar(50))
+begin 
+	decalre continue handler for '42S02' as select 'table not found';
+
+	select * from t;
+	select 'hello';
+
+end
+
+call testapp('d')
+
+create or replace procedure fetchdata(id int)
+begin 
+	declare sal float;
+	decalre jobt  varchar(40);
+	
+	select salary,jobtitle into sal,jobt from employees where employeenumber=id;
+	if jobt =='sales Rep' then 
+		update employee set jobtitle='Sales mgr',salary=salary*0.05 where employeenumber=id;
+	end if;
+	select concat(sal ,' ',jobt)	
+end;
+
+IN (default parameter will be in parameter )
+OUT
+INOUT
+
+
+
+call fetchdata(111)
+
+
+
+
+
+
+
+	
+
+
+	
+
+
